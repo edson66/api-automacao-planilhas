@@ -44,7 +44,7 @@ public class GeradorArquivosService {
         String saidaNce = "ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
                 dadosCabecalhos.get("ANO_ORCAMENTOS") + "-" + dadosCabecalhos.get("MES_ORCAMENTOS")
                 + "-" + dadosCabecalhos.get("DIA_ORCAMENTOS") + " NCE.xlsx";
-        InputStream modeloNce = getClass().getResourceAsStream("/MODELO NCE JAVA.xlsx");
+        InputStream modeloNce = getClass().getResourceAsStream("/templates/MODELO NCE JAVA.xlsx");
 
         byte[] bytesNce = orcamentosService.preencherNce(
                 modeloNce,
@@ -56,7 +56,7 @@ public class GeradorArquivosService {
         String saidaPaper = "ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
                 dadosCabecalhos.get("ANO_ORCAMENTOS") + "-" + dadosCabecalhos.get("MES_ORCAMENTOS")
                 + "-" + dadosCabecalhos.get("DIA_ORCAMENTOS") + " PAPER&CO.xlsx";
-        InputStream modeloPaper = getClass().getResourceAsStream("/MODELO PAPER JAVA.xlsx");
+        InputStream modeloPaper = getClass().getResourceAsStream("/templates/MODELO PAPER JAVA.xlsx");
 
         byte[] bytesPaper = orcamentosService.preencherPaper(
                 modeloPaper,
@@ -68,7 +68,7 @@ public class GeradorArquivosService {
         String saidaGrafite = "ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
                 dadosCabecalhos.get("ANO_ORCAMENTOS") + "-" + dadosCabecalhos.get("MES_ORCAMENTOS")
                 + "-" + dadosCabecalhos.get("DIA_ORCAMENTOS") + " GRAFITE.xlsx";
-        InputStream modeloGrafite = getClass().getResourceAsStream("/MODELO GRAFITE JAVA.xlsx");
+        InputStream modeloGrafite = getClass().getResourceAsStream("/templates/MODELO GRAFITE JAVA.xlsx");
 
         byte[] bytesGrafte = orcamentosService.preencherGrafite(
                 modeloGrafite,
@@ -78,7 +78,7 @@ public class GeradorArquivosService {
         adicionarAoZip(zipOutputStream,saidaGrafite,bytesGrafte);
 
         String saidaControle = "CONTROLE NF" + dadosCabecalhos.get("NF") + " .xlsx";
-        InputStream modeloControle = getClass().getResourceAsStream("/MODELO CONTROLE.xlsx");
+        InputStream modeloControle = getClass().getResourceAsStream("/templates/MODELO CONTROLE.xlsx");
 
         byte[] bytesControle = orcamentosService.preencherControle(
                 modeloControle,
@@ -92,7 +92,7 @@ public class GeradorArquivosService {
             String saidaCons = "ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
                     dadosCabecalhos.get("ANO_CONSOLIDACAO") + "-" + dadosCabecalhos.get("MES_CONSOLIDACAO")
                     + "-" + dadosCabecalhos.get("DIA_CONSOLIDACAO") + " CONSOLIDAÇÃO.docx";
-            InputStream modeloCons = getClass().getResourceAsStream("/MODELO CONSOLIDACAO JAVA.docx");
+            InputStream modeloCons = getClass().getResourceAsStream("/templates/MODELO CONSOLIDACAO JAVA.docx");
 
             byte[] bytesCons = wordDocsService.gerarConsolidacao(modeloCons, dadosEscola, itens, totalNce);
             adicionarAoZip(zipOutputStream,saidaCons,bytesCons);
@@ -103,7 +103,7 @@ public class GeradorArquivosService {
             String saidaRecibo = "src/main/resources/arquivos/ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
                     dadosCabecalhos.get("ANO_R") + "-" + dadosCabecalhos.get("MES_R")
                     + "-" + dadosCabecalhos.get("DIA_R") + " RECIBO.docx";
-            InputStream modeloRecibo = getClass().getResourceAsStream("/MODELO RECIBO.docx");
+            InputStream modeloRecibo = getClass().getResourceAsStream("/templates/MODELO RECIBO.docx");
 
             byte[] bytesRecibo = wordDocsService.gerarRecibo(modeloRecibo, dadosEscola, totalNce);
             adicionarAoZip(zipOutputStream,saidaRecibo,bytesRecibo);
