@@ -5,7 +5,9 @@ import br.com.caelum.stella.inwords.FormatoDeReal;
 import br.com.caelum.stella.inwords.NumericToWordsConverter;
 import com.deepoove.poi.XWPFTemplate;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
@@ -16,9 +18,9 @@ import java.util.Map;
 @Service
 public class WordDocsService {
 
-    public static void gerarConsolidacao(String caminhoModelo, String caminhoSaida,
-                                         Map<String,String> dadosEscolas, List<Map<String, Object>> itens,
-                                         double total){
+    public byte[] gerarConsolidacao(InputStream modeloCons,
+                                           Map<String,String> dadosEscolas, List<Map<String, Object>> itens,
+                                           double total){
         try {
             Map<String, Object> dadosFinais = new HashMap<>();
 
@@ -82,12 +84,15 @@ public class WordDocsService {
             dadosFinais.put("TOTAL_PAPER",df.format(totalPaper));
             dadosFinais.put("TOTAL_GRAFITE",df.format(totalGrafite));
 
-            XWPFTemplate template = XWPFTemplate.compile(caminhoModelo);
+            XWPFTemplate template = XWPFTemplate.compile(modeloCons);
             template.render(dadosFinais);
-            template.writeToFile(caminhoSaida);
+
+            ByteArrayOutputStream saidaMemoria = new ByteArrayOutputStream();
+
+            template.write(saidaMemoria);
             template.close();
 
-            System.out.println("Consolidação gerada!");
+            return saidaMemoria.toByteArray();
 
         } catch (RuntimeException e) {
             throw new RuntimeException("Erro ao gerar Consolidação: " + e.getMessage());
@@ -96,7 +101,7 @@ public class WordDocsService {
         }
     }
 
-    public static void gerarRecibo(String caminhoModelo, String caminhoSaida,
+    public byte[] gerarRecibo(InputStream modeloRecibo,
                                    Map<String, String> dadosEscola, double total) {
         try {
             DecimalFormatSymbols simbolos = new DecimalFormatSymbols(new Locale("pt", "BR"));
@@ -114,12 +119,15 @@ public class WordDocsService {
             dados.put("TOTAL", df.format(total));
             dados.put("EXTENSO",conversor.toWords(total).toUpperCase());
 
-            XWPFTemplate template = XWPFTemplate.compile(caminhoModelo);
+            XWPFTemplate template = XWPFTemplate.compile(modeloRecibo);
             template.render(dados);
-            template.writeToFile(caminhoSaida);
+
+            ByteArrayOutputStream saidaMemoria = new ByteArrayOutputStream();
+
+            template.write(saidaMemoria);
             template.close();
 
-            System.out.println("Recibo gerado!");
+            return saidaMemoria.toByteArray();
 
         } catch (Exception e) {
             throw new RuntimeException("Erro no Recibo: " + e.getMessage());

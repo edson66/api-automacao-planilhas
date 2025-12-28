@@ -5,21 +5,17 @@ import org.springframework.stereotype.Service;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class OrcamentosService {
 
-    public static void preencherNce(String caminhoEntrada, String caminhoSaida,
+    public byte[] preencherNce(InputStream modeloNce,
                                     Map<String,String> dadosCabecalho, List<Map<String,Object>> itens) throws IOException {
 
-        try(FileInputStream inputStream = new FileInputStream(new File(caminhoEntrada));
-            Workbook workbook = new XSSFWorkbook(inputStream)){
+        try(Workbook workbook = new XSSFWorkbook(modeloNce)){
 
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -76,21 +72,21 @@ public class OrcamentosService {
 
             workbook.setForceFormulaRecalculation(true);
 
-            try(FileOutputStream outputStream = new FileOutputStream(new File(caminhoSaida))){
-                workbook.write(outputStream);
-            }
-            System.out.println("NCE gerado.");
+            ByteArrayOutputStream saidaMemoria = new ByteArrayOutputStream();
+            workbook.write(saidaMemoria);
+            workbook.close();
+
+            return saidaMemoria.toByteArray();
 
         }catch (IOException e){
             throw new RuntimeException("Erro ao processar NCE: " + e.getMessage());
         }
     }
 
-    public static void preencherPaper(String caminhoEntrada, String caminhoSaida,
+    public byte[] preencherPaper(InputStream modeloPaper,
                                       Map<String,String> dadosCabecalho, List<Map<String,Object>> itens){
 
-        try(FileInputStream inputStream = new FileInputStream(new File(caminhoEntrada));
-            Workbook workbook = new XSSFWorkbook(inputStream)){
+        try(Workbook workbook = new XSSFWorkbook(modeloPaper)){
 
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -147,21 +143,21 @@ public class OrcamentosService {
 
             workbook.setForceFormulaRecalculation(true);
 
-            try(FileOutputStream outputStream = new FileOutputStream(new File(caminhoSaida))){
-                workbook.write(outputStream);
-            }
-            System.out.println("PAPER&CO gerado.");
+            ByteArrayOutputStream saidaMemoria = new ByteArrayOutputStream();
+            workbook.write(saidaMemoria);
+            workbook.close();
+
+            return saidaMemoria.toByteArray();
 
         }catch (IOException e){
             throw new RuntimeException("Erro ao processar PAPER: " + e.getMessage());
         }
     }
 
-    public static void preencherGrafite(String caminhoEntrada, String caminhoSaida,
+    public byte[] preencherGrafite(InputStream modeloGrafite,
                                         Map<String,String> dadosCabecalho, List<Map<String,Object>> itens){
 
-        try(FileInputStream inputStream = new FileInputStream(new File(caminhoEntrada));
-            Workbook workbook = new XSSFWorkbook(inputStream)){
+        try(Workbook workbook = new XSSFWorkbook(modeloGrafite)){
 
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -219,21 +215,21 @@ public class OrcamentosService {
 
             workbook.setForceFormulaRecalculation(true);
 
-            try(FileOutputStream outputStream = new FileOutputStream(new File(caminhoSaida))){
-                workbook.write(outputStream);
-            }
-            System.out.println("GRAFITE gerado.");
+            ByteArrayOutputStream saidaMemoria = new ByteArrayOutputStream();
+            workbook.write(saidaMemoria);
+            workbook.close();
+
+            return saidaMemoria.toByteArray();
 
         }catch (IOException e){
             throw new RuntimeException("Erro ao processar GRAFITE: " + e.getMessage());
         }
     }
 
-    public static void preencherControle(String caminhoEntrada, String caminhoSaida,
+    public byte[] preencherControle(InputStream modeloControle,
                                          List<Map<String,Object>> itens){
 
-        try(FileInputStream inputStream = new FileInputStream(new File(caminhoEntrada));
-            Workbook workbook = new XSSFWorkbook(inputStream)){
+        try(Workbook workbook = new XSSFWorkbook(modeloControle)){
 
             Sheet sheet = workbook.getSheetAt(0);
 
@@ -284,17 +280,18 @@ public class OrcamentosService {
 
             workbook.setForceFormulaRecalculation(true);
 
-            try(FileOutputStream outputStream = new FileOutputStream(new File(caminhoSaida))){
-                workbook.write(outputStream);
-            }
-            System.out.println("CONTROLE gerado.");
+            ByteArrayOutputStream saidaMemoria = new ByteArrayOutputStream();
+            workbook.write(saidaMemoria);
+            workbook.close();
+
+            return saidaMemoria.toByteArray();
 
         }catch (IOException e){
             throw new RuntimeException("Erro ao processar CONTROLE: " + e.getMessage());
         }
     }
 
-    public static String formatarTextoTitle(String texto) {
+    public String formatarTextoTitle(String texto) {
         if (texto == null || texto.isEmpty()) {
             return "";
         }
