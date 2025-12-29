@@ -16,7 +16,6 @@ public class NavegadorLauncher {
         String url = "http://localhost:8080";
         Runtime runtime = Runtime.getRuntime();
         try {
-            // Comando para abrir navegador padrão no Windows
             runtime.exec("rundll32 url.dll,FileProtocolHandler " + url);
         } catch (IOException e) {
             e.printStackTrace();
