@@ -100,7 +100,7 @@ public class GeradorArquivosService {
 
         if (dadosEscola.get("TEM_RECIBO").equals("S")) {
 
-            String saidaRecibo = "src/main/resources/arquivos/ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
+            String saidaRecibo = "ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
                     dadosCabecalhos.get("ANO_R") + "-" + dadosCabecalhos.get("MES_R")
                     + "-" + dadosCabecalhos.get("DIA_R") + " RECIBO.docx";
             InputStream modeloRecibo = getClass().getResourceAsStream("/templates/MODELO RECIBO.docx");

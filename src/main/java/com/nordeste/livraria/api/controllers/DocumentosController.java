@@ -42,7 +42,7 @@ public class DocumentosController {
             @RequestParam("arquivoDoador")MultipartFile arquivoDoador
             ) throws IOException {
 
-        var escola = repository.findByCnpj(cnpj)
+        var escola = repository.findByCnpjLimpo(cnpj)
                 .orElseThrow(() -> new EntityNotFoundException("Escola não encontrada."));
 
         var dto = new DadosEntradaAutomacao(escola,nf,dataOrcamentos,dataConsolidacao,

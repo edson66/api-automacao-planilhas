@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css"> <title>Livraria Automação</title>
+</head>
+<body>
+
+<header>
+    <h1>Gerador de Documentos</h1>
+</header>
+
+<main>
+    <div class="container">
+        <div class="card">
+            <h3>1. Identificação da Escola</h3>
+            <div class="input-group">
+                <input type="text" id="inputCnpj" placeholder="Digite o CNPJ (apenas números)" maxlength="14">
+                <button type="button" onclick="verificarEscola()">Verificar</button>
+            </div>
+            <p id="resultadoEscola" class="mensagem-status"></p>
+        </div>
+
+        <form id="formGeracao" style="display: none;">
+
+            <div class="card">
+                <h3>2. Dados do Arquivo</h3>
+                <label>Arquivo Doador (Excel):</label>
+                <input type="file" id="inputArquivo" accept=".xlsx">
+
+                <div class="separador"></div>
+
+                <label>Número da NF:</label>
+                <input type="text" id="inputNf" placeholder="Ex: 10203">
+
+                <label>Data dos Orçamentos:</label>
+                <input type="date" id="dataOrcamentos">
+            </div>
+
+            <div class="card">
+                <h3>3. Opções e Datas</h3>
+
+                <div class="opcao-wrapper">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="chkConsolidacao" onchange="toggleDiv('divConsolidacao', this.checked)">
+                        Gerar Consolidação
+                    </label>
+                </div>
+
+                <div id="divConsolidacao" class="sub-opcoes" style="display: none;">
+                    <label>Data da Consolidação:</label>
+                    <input type="date" id="dataConsolidacao">
+                </div>
+
+                <div class="opcao-wrapper">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="chkRecibo" onchange="toggleDiv('divRecibo', this.checked)">
+                        Gerar Recibo
+                    </label>
+                </div>
+
+                <div id="divRecibo" class="sub-opcoes" style="display: none;">
+                    <label>Data do Recibo:</label>
+                    <input type="date" id="dataRecibo">
+
+                    <label>Pago por meio de:</label>
+                    <select id="pagoPor">
+                        <option value="TRANSFÊRENCIA BANCÁRIA">Transferência</option>
+                        <option value="PIX">Pix</option>
+                    </select>
+
+                    <label>Data da Nota (Opcional):</label>
+                    <small>Se vazio, usa data do recibo</small>
+                    <input type="date" id="dataNota">
+                </div>
+
+            </div>
+
+            <button type="button" class="btn-gerar" onclick="enviarTudo()">GERAR DOCUMENTOS</button>
+        </form>
+    </div>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

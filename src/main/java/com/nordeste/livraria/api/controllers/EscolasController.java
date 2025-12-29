@@ -43,11 +43,20 @@ public class EscolasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity buscarEscola(@PathVariable Long id){
+    public ResponseEntity buscarEscola(@RequestParam Long id){
         var escola = repository.findById(id);
 
         return ResponseEntity.ok(new DadosCompletosEscola(escola.orElseThrow(() ->
                 new EntityNotFoundException("Escola não encontrada!"))));
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity buscarPorCnpj(@RequestParam("cnpj") String cnpjLimpo){
+        var escola = repository.findByCnpjLimpo(cnpjLimpo)
+                .orElseThrow(() -> new EntityNotFoundException("Escola não encontrada!"));
+
+
+        return ResponseEntity.ok(new DadosCompletosEscola(escola));
     }
 
     @PutMapping("/{id}")
