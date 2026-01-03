@@ -77,7 +77,7 @@ public class GeradorArquivosService {
         );
         adicionarAoZip(zipOutputStream,saidaGrafite,bytesGrafte);
 
-        String saidaControle = "CONTROLE NF" + dadosCabecalhos.get("NF") + " .xlsx";
+        String saidaControle = "MODELO DOC NF" + dadosCabecalhos.get("NF") + " .xlsx";
         InputStream modeloControle = getClass().getResourceAsStream("/templates/MODELO CONTROLE.xlsx");
 
         byte[] bytesControle = orcamentosService.preencherControle(
@@ -91,7 +91,7 @@ public class GeradorArquivosService {
 
             String saidaCons = "ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
                     dadosCabecalhos.get("ANO_CONSOLIDACAO") + "-" + dadosCabecalhos.get("MES_CONSOLIDACAO")
-                    + "-" + dadosCabecalhos.get("DIA_CONSOLIDACAO") + " CONSOLIDAÇÃO.docx";
+                    + "-" + dadosCabecalhos.get("DIA_CONSOLIDACAO") + " CONSOLIDAÇÃO DE PESQ DE PREÇO.docx";
             InputStream modeloCons = getClass().getResourceAsStream("/templates/MODELO CONSOLIDACAO JAVA.docx");
 
             byte[] bytesCons = wordDocsService.gerarConsolidacao(modeloCons, dadosEscola, itens, totalNce);
