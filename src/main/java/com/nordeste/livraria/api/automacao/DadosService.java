@@ -197,17 +197,17 @@ public class DadosService {
                 minPctPaper = 0.10; maxPctPaper = 0.14;
                 minPctGrafite = 0.14; maxPctGrafite = 0.18;
             } else if (valorAtual < 20.00) {
-                minPctPaper = 0.08; maxPctPaper = 0.13;
-                minPctGrafite = 0.11; maxPctGrafite = 0.15;
+                minPctPaper = 0.11; maxPctPaper = 0.17;
+                minPctGrafite = 0.07; maxPctGrafite = 0.15;
             } else if (valorAtual < 40.00) {
-                minPctPaper = 0.08; maxPctPaper = 0.12;
-                minPctGrafite = 0.05; maxPctGrafite = 0.10;
+                minPctPaper = 0.08; maxPctPaper = 0.15;
+                minPctGrafite = 0.05; maxPctGrafite = 0.09;
             } else if(valorAtual < 100.00){
-                minPctPaper = 0.03; maxPctPaper = 0.10;
-                minPctGrafite = 0.03; maxPctGrafite = 0.10;
+                minPctPaper = 0.03; maxPctPaper = 0.09;
+                minPctGrafite = 0.05; maxPctGrafite = 0.15;
             }else {
                 minPctPaper = 0.02; maxPctPaper = 0.08;
-                minPctGrafite = 0.02; maxPctGrafite = 0.08;
+                minPctGrafite = 0.06; maxPctGrafite = 0.13;
             }
 
             double pctPaper = minPctPaper + (maxPctPaper - minPctPaper) * random.nextDouble();
