@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -35,6 +38,9 @@ public class GeradorArquivosService {
 
         dadosService.aplicarRegrasDeNegocio(itens);
 
+        DecimalFormatSymbols simbolos = new DecimalFormatSymbols(new Locale("pt", "BR"));
+        simbolos.setDecimalSeparator(',');
+        DecimalFormat df = new DecimalFormat("0.00", simbolos);
         double totalNce = dadosService.calcularTotalGeral(itens);
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -102,7 +108,7 @@ public class GeradorArquivosService {
 
             String saidaRecibo = "ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
                     dadosCabecalhos.get("ANO_R") + "-" + dadosCabecalhos.get("MES_R")
-                    + "-" + dadosCabecalhos.get("DIA_R") + " RECIBO "+ String.valueOf(totalNce) + " NCE.docx";
+                    + "-" + dadosCabecalhos.get("DIA_R") + " RECIBO "+ df.format(totalNce) + " NCE.docx";
             InputStream modeloRecibo = getClass().getResourceAsStream("/templates/MODELO RECIBO.docx");
 
             byte[] bytesRecibo = wordDocsService.gerarRecibo(modeloRecibo, dadosEscola, totalNce);
