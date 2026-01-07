@@ -102,7 +102,7 @@ public class GeradorArquivosService {
 
             String saidaRecibo = "ORÇAMENTO NF" + dadosCabecalhos.get("NF") + " " +
                     dadosCabecalhos.get("ANO_R") + "-" + dadosCabecalhos.get("MES_R")
-                    + "-" + dadosCabecalhos.get("DIA_R") + " RECIBO.docx";
+                    + "-" + dadosCabecalhos.get("DIA_R") + " RECIBO "+ String.valueOf(totalNce) + " NCE.docx";
             InputStream modeloRecibo = getClass().getResourceAsStream("/templates/MODELO RECIBO.docx");
 
             byte[] bytesRecibo = wordDocsService.gerarRecibo(modeloRecibo, dadosEscola, totalNce);
