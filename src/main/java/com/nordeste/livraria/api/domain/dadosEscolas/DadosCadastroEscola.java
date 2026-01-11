@@ -17,4 +17,8 @@ public record DadosCadastroEscola(
         String endereco,
         String diretor
 ) {
+    public DadosCadastroEscola(Escola escolaMock) {
+        this(escolaMock.getCnpjLimpo(), escolaMock.getCnpj(), escolaMock.getNome(),
+                escolaMock.getCep(), escolaMock.getCidade(), escolaMock.getEndereco(), escolaMock.getDiretor());
+    }
 }
