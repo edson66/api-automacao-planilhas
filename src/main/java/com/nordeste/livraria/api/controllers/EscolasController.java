@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/escolas")
 public class EscolasController {
@@ -57,6 +59,14 @@ public class EscolasController {
 
 
         return ResponseEntity.ok(new DadosCompletosEscola(escola));
+    }
+
+    @GetMapping("/buscar-por-nome")
+    public ResponseEntity<List<DadosCompletosEscola>> buscarPorNome(@RequestParam("nome") String nome){
+        var escolas = repository.findTop10ByNomeContainingIgnoreCaseOrderByNome(nome)
+                .stream().map(DadosCompletosEscola::new).toList();
+
+        return ResponseEntity.ok(escolas);
     }
 
     @PutMapping("/{id}")

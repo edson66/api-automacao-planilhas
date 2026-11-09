@@ -35,6 +35,138 @@ async function verificarEscola() {
     }
 }
 
+let debounceBuscaNome = null;
+
+function buscarPorNome() {
+    const input = document.getElementById('inputBuscaNome');
+    const lista = document.getElementById('sugestoesNome');
+    const nome = input.value.trim();
+
+    clearTimeout(debounceBuscaNome);
+
+    if (nome.length < 2) {
+        lista.innerHTML = '';
+        lista.style.display = 'none';
+        return;
+    }
+
+    debounceBuscaNome = setTimeout(async () => {
+        try {
+            const response = await fetch(`/escolas/buscar-por-nome?nome=${encodeURIComponent(nome)}`);
+            if (!response.ok) { return; }
+
+            const escolas = await response.json();
+            lista.innerHTML = '';
+
+            if (escolas.length === 0) {
+                lista.style.display = 'none';
+                return;
+            }
+
+            escolas.forEach(escola => {
+                const item = document.createElement('div');
+                item.className = 'sugestao-item';
+                item.innerText = `${escola.nome} (${escola.cnpj})`;
+                item.onclick = () => selecionarEscolaSugerida(escola);
+                lista.appendChild(item);
+            });
+
+            lista.style.display = 'block';
+        } catch (error) {
+            console.error(error);
+        }
+    }, 300);
+}
+
+function selecionarEscolaSugerida(escola) {
+    const lista = document.getElementById('sugestoesNome');
+    const msg = document.getElementById('resultadoEscola');
+    const form = document.getElementById('formGeracao');
+
+    document.getElementById('inputBuscaNome').value = escola.nome;
+    document.getElementById('inputCnpj').value = escola.cnpjLimpo;
+    lista.innerHTML = '';
+    lista.style.display = 'none';
+
+    escolaCnpj = escola.cnpjLimpo;
+    msg.innerText = `Escola Encontrada: ${escola.nome}`;
+    msg.className = "mensagem-status sucesso";
+    form.style.display = 'block';
+}
+
+document.addEventListener('click', (event) => {
+    const lista = document.getElementById('sugestoesNome');
+    const input = document.getElementById('inputBuscaNome');
+    if (lista && event.target !== input && !lista.contains(event.target)) {
+        lista.style.display = 'none';
+    }
+});
+
+function abrirModalCadastro(event) {
+    event.preventDefault();
+    document.getElementById('modalCadastro').style.display = 'flex';
+}
+
+function fecharModalCadastro() {
+    document.getElementById('modalCadastro').style.display = 'none';
+    document.getElementById('resultadoCadastro').innerText = '';
+}
+
+async function cadastrarEscola() {
+    const cnpjDigitado = document.getElementById('cadNovoCnpj').value;
+    const nome = document.getElementById('cadNovoNome').value;
+    const cep = document.getElementById('cadNovoCep').value;
+    const cidade = document.getElementById('cadNovoCidade').value;
+    const endereco = document.getElementById('cadNovoEndereco').value;
+    const diretor = document.getElementById('cadNovoDiretor').value;
+    const msg = document.getElementById('resultadoCadastro');
+
+    const cnpjLimpo = cnpjDigitado.replace(/\D/g, '');
+
+    if (!cnpjLimpo || !nome || !cep || !cidade || !endereco) {
+        msg.innerText = "Preencha todos os campos obrigatórios!";
+        msg.className = "mensagem-status erro";
+        return;
+    }
+
+    try {
+        const response = await fetch('/escolas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                cnpjLimpo: cnpjLimpo,
+                cnpj: cnpjDigitado,
+                nome: nome,
+                cep: cep,
+                cidade: cidade,
+                endereco: endereco,
+                diretor: diretor
+            })
+        });
+
+        if (response.ok) {
+            msg.innerText = "Escola cadastrada com sucesso!";
+            msg.className = "mensagem-status sucesso";
+            setTimeout(() => {
+                fecharModalCadastro();
+                document.getElementById('cadNovoCnpj').value = '';
+                document.getElementById('cadNovoNome').value = '';
+                document.getElementById('cadNovoCep').value = '';
+                document.getElementById('cadNovoCidade').value = '';
+                document.getElementById('cadNovoEndereco').value = '';
+                document.getElementById('cadNovoDiretor').value = '';
+            }, 1000);
+        } else {
+            msg.innerText = "Erro ao cadastrar. Verifique os dados.";
+            msg.className = "mensagem-status erro";
+        }
+    } catch (error) {
+        console.error(error);
+        msg.innerText = "Erro ao conectar com servidor.";
+        msg.className = "mensagem-status erro";
+    }
+}
+
 async function enviarTudo() {
     const arquivoInput = document.getElementById('inputArquivo');
     if(arquivoInput.files.length === 0) {
