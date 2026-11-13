@@ -1,4 +1,11 @@
 let escolaCnpj = "";
+let escolaSelecionada = null;
+
+function definirEscolaSelecionada(escola) {
+    escolaSelecionada = escola;
+    escolaCnpj = escola ? escola.cnpjLimpo : "";
+    document.getElementById('btnEditarEscola').style.display = escola ? 'block' : 'none';
+}
 
 function toggleDiv(idDiv, mostrar) {
     const div = document.getElementById(idDiv);
@@ -17,7 +24,7 @@ async function verificarEscola() {
 
         if (response.ok) {
             const escola = await response.json();
-            escolaCnpj = escola.cnpjLimpo;
+            definirEscolaSelecionada(escola);
 
             msg.innerText = `Escola Encontrada: ${escola.nome}`;
             msg.className = "mensagem-status sucesso";
@@ -27,7 +34,7 @@ async function verificarEscola() {
             msg.innerText = "Escola não encontrada!";
             msg.className = "mensagem-status erro";
             form.style.display = 'none';
-            escolaCnpj = "";
+            definirEscolaSelecionada(null);
         }
     } catch (error) {
         console.error(error);
@@ -88,7 +95,7 @@ function selecionarEscolaSugerida(escola) {
     lista.innerHTML = '';
     lista.style.display = 'none';
 
-    escolaCnpj = escola.cnpjLimpo;
+    definirEscolaSelecionada(escola);
     msg.innerText = `Escola Encontrada: ${escola.nome}`;
     msg.className = "mensagem-status sucesso";
     form.style.display = 'block';
@@ -158,6 +165,83 @@ async function cadastrarEscola() {
             }, 1000);
         } else {
             msg.innerText = "Erro ao cadastrar. Verifique os dados.";
+            msg.className = "mensagem-status erro";
+        }
+    } catch (error) {
+        console.error(error);
+        msg.innerText = "Erro ao conectar com servidor.";
+        msg.className = "mensagem-status erro";
+    }
+}
+
+function abrirModalEdicao() {
+    if (!escolaSelecionada) { return; }
+
+    document.getElementById('editCnpj').value = escolaSelecionada.cnpj || '';
+    document.getElementById('editNome').value = escolaSelecionada.nome || '';
+    document.getElementById('editCep').value = escolaSelecionada.cep || '';
+    document.getElementById('editCidade').value = escolaSelecionada.cidade || '';
+    document.getElementById('editEndereco').value = escolaSelecionada.endereco || '';
+    document.getElementById('editDiretor').value = escolaSelecionada.diretor || '';
+    document.getElementById('resultadoEdicao').innerText = '';
+
+    document.getElementById('modalEdicao').style.display = 'flex';
+}
+
+function fecharModalEdicao() {
+    document.getElementById('modalEdicao').style.display = 'none';
+    document.getElementById('resultadoEdicao').innerText = '';
+}
+
+async function salvarEdicaoEscola() {
+    if (!escolaSelecionada) { return; }
+
+    const cnpjDigitado = document.getElementById('editCnpj').value;
+    const nome = document.getElementById('editNome').value;
+    const cep = document.getElementById('editCep').value;
+    const cidade = document.getElementById('editCidade').value;
+    const endereco = document.getElementById('editEndereco').value;
+    const diretor = document.getElementById('editDiretor').value;
+    const msg = document.getElementById('resultadoEdicao');
+
+    const cnpjLimpo = cnpjDigitado.replace(/\D/g, '');
+
+    if (!cnpjLimpo || !nome || !cep || !cidade || !endereco) {
+        msg.innerText = "Preencha todos os campos obrigatórios!";
+        msg.className = "mensagem-status erro";
+        return;
+    }
+
+    try {
+        const response = await fetch(`/escolas/${escolaSelecionada.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                cnpjLimpo: cnpjLimpo,
+                cnpj: cnpjDigitado,
+                nome: nome,
+                cep: cep,
+                cidade: cidade,
+                endereco: endereco,
+                diretor: diretor
+            })
+        });
+
+        if (response.ok) {
+            const escolaAtualizada = await response.json();
+            definirEscolaSelecionada(escolaAtualizada);
+
+            document.getElementById('inputCnpj').value = escolaAtualizada.cnpjLimpo;
+            document.getElementById('inputBuscaNome').value = escolaAtualizada.nome;
+            const status = document.getElementById('resultadoEscola');
+            status.innerText = `Escola Encontrada: ${escolaAtualizada.nome}`;
+            status.className = "mensagem-status sucesso";
+
+            msg.innerText = "Escola atualizada com sucesso!";
+            msg.className = "mensagem-status sucesso";
+            setTimeout(fecharModalEdicao, 1000);
+        } else {
+            msg.innerText = "Erro ao atualizar. Verifique os dados.";
             msg.className = "mensagem-status erro";
         }
     } catch (error) {

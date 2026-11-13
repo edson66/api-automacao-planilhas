@@ -28,6 +28,8 @@
 
             <p id="resultadoEscola" class="mensagem-status"></p>
 
+            <button type="button" id="btnEditarEscola" class="btn-editar" style="display: none;" onclick="abrirModalEdicao()">Editar escola</button>
+
             <a href="#" class="link-cadastro" onclick="abrirModalCadastro(event)">+ Cadastrar nova escola</a>
         </div>
 
@@ -119,6 +121,37 @@
         <div class="modal-botoes">
             <button type="button" class="btn-secundario" onclick="fecharModalCadastro()">Cancelar</button>
             <button type="button" onclick="cadastrarEscola()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalEdicao" class="modal-overlay" style="display: none;">
+    <div class="modal-conteudo">
+        <h3>Editar Escola</h3>
+
+        <label>CNPJ:</label>
+        <input type="text" id="editCnpj" placeholder="00.000.000/0000-00">
+
+        <label>Nome:</label>
+        <input type="text" id="editNome" placeholder="Nome da escola">
+
+        <label>CEP:</label>
+        <input type="text" id="editCep" placeholder="00000-000">
+
+        <label>Cidade:</label>
+        <input type="text" id="editCidade">
+
+        <label>Endereço:</label>
+        <input type="text" id="editEndereco">
+
+        <label>Diretor (opcional):</label>
+        <input type="text" id="editDiretor">
+
+        <p id="resultadoEdicao" class="mensagem-status"></p>
+
+        <div class="modal-botoes">
+            <button type="button" class="btn-secundario" onclick="fecharModalEdicao()">Cancelar</button>
+            <button type="button" onclick="salvarEdicaoEscola()">Salvar alterações</button>
         </div>
     </div>
 </div>

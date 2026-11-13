@@ -142,6 +142,20 @@ input[type="checkbox"] {
     background-color: var(--fundo);
 }
 
+/* Botão de edição */
+.btn-editar {
+    display: block;
+    margin-top: 10px;
+    background-color: var(--branco);
+    color: var(--azul-escuro);
+    border: 1px solid var(--azul-escuro);
+}
+
+.btn-editar:hover {
+    background-color: var(--azul-escuro);
+    color: var(--branco);
+}
+
 /* Link de cadastro */
 .link-cadastro {
     display: inline-block;
